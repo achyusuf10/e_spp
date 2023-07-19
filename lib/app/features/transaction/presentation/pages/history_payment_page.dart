@@ -165,35 +165,44 @@ class HistoryPaymentPage extends StatelessWidget {
                         ),
                     ViewState.success: (context) {
                       if (state.listDatas.isEmpty) {
-                        return const GeneralEmptyErrorWidget();
+                        return GeneralEmptyErrorWidget(
+                          onRefresh:
+                              context.read<HistoryPaymentCubit>().onGetDatas,
+                        );
                       }
-                      return ListView.separated(
-                        itemBuilder: (context, index) {
-                          var data = state.listDatas[index];
-                          return Container(
-                            decoration: DottedDecoration(),
-                            margin: EdgeInsets.only(
-                              bottom: 10.h,
-                              left: 16.w,
-                              right: 16.w,
-                            ),
-                            child: TrxCard(
-                              onTap: () {
-                                context
-                                    .read<HistoryPaymentCubit>()
-                                    .onTapItemCard(data);
-                              },
-                              nominal: (data.spp?.nominal ?? 0).toRupiah(),
-                              status: data.statusPembayaran ?? '0',
-                              time: (data.time ?? '').extToCustomFormattedDate(
-                                  originFormatDate: "yyyy-MM-dd hh:mm:ss",
-                                  outputDateFormat: 'dd MMMM yyyy hh:mm'),
-                              titleMonth: data.spp?.bulan ?? '',
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) => const SizedBox(),
-                        itemCount: state.listDatas.length,
+                      return RefreshIndicator(
+                        onRefresh:
+                            context.read<HistoryPaymentCubit>().onGetDatas,
+                        child: ListView.separated(
+                          itemBuilder: (context, index) {
+                            var data = state.listDatas[index];
+                            return Container(
+                              decoration: DottedDecoration(),
+                              margin: EdgeInsets.only(
+                                bottom: 10.h,
+                                left: 16.w,
+                                right: 16.w,
+                              ),
+                              child: TrxCard(
+                                onTap: () {
+                                  context
+                                      .read<HistoryPaymentCubit>()
+                                      .onTapItemCard(data);
+                                },
+                                nominal: (data.spp?.nominal ?? 0).toRupiah(),
+                                status: data.statusPembayaran ?? '0',
+                                time: (data.time ?? '')
+                                    .extToCustomFormattedDate(
+                                        originFormatDate: "yyyy-MM-dd hh:mm:ss",
+                                        outputDateFormat: 'dd MMMM yyyy hh:mm'),
+                                titleMonth: data.spp?.bulan ?? '',
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(),
+                          itemCount: state.listDatas.length,
+                        ),
                       );
                     },
                   },
