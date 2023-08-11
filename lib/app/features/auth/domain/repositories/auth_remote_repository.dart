@@ -52,6 +52,10 @@ class AuthRemoteRepository {
         message:
             e.response?.data['message'] ?? "Terjadi kesalahan pada sistem.",
       );
+    } catch (err) {
+      return DataActivities.error(
+        message: err.toString(),
+      );
     }
   }
 }

@@ -22,121 +22,128 @@ class HomePage extends StatelessWidget {
             width: double.infinity,
           ),
           SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 40.h,
-                          height: 40.h,
-                          padding: EdgeInsets.all(8.h),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
+            child: RefreshIndicator(
+              onRefresh: () async {
+                context.read<HomeCubit>().onRefresh();
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 40.h,
+                            height: 40.h,
+                            padding: EdgeInsets.all(8.h),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Image.asset(
+                              ImgAssetsConst.logoMI,
+                              fit: BoxFit.fitHeight,
+                            ),
                           ),
-                          child: Image.asset(
-                            ImgAssetsConst.logoMI,
-                            fit: BoxFit.fitHeight,
+                          SizedBox(
+                            width: 10.w,
                           ),
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        BlocBuilder<HomeCubit, HomeState>(
-                          builder: (context, state) {
-                            return Text(
-                              'Halo, ${state.userData.name ?? 'User'}',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.white,
-                              ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: BlocBuilder<HomeCubit, HomeState>(
-                      builder: (context, state) {
-                        return StudentCard(
-                          nameStudent:
-                              (state.userData.name ?? 'User').extToTitleCase(),
-                          nisn: state.userData.nisn.toString(),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(
-                      35.w,
-                      37.h,
-                      35.w,
-                      30.h,
-                    ),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(
-                          20.r,
-                        ),
+                          BlocBuilder<HomeCubit, HomeState>(
+                            builder: (context, state) {
+                              return Text(
+                                'Halo, ${state.userData.name ?? '......'}',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.white,
+                                ),
+                              );
+                            },
+                          )
+                        ],
                       ),
                     ),
-                    child: GridView.count(
-                      shrinkWrap: true,
-                      primary: false,
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 30.w,
-                      crossAxisSpacing: 30.h,
-                      childAspectRatio: 1,
-                      children: [
-                        _buttonMenu(
-                          name: 'Profile',
-                          onTap: context.read<HomeCubit>().onTapProfile,
-                          urlIcon: ImgAssetsConst.icProfile,
-                        ),
-                        _buttonMenu(
-                          name: 'Data Tagihan',
-                          paddingImage: EdgeInsets.all(13.h),
-                          onTap: context.read<HomeCubit>().onTapBill,
-                          urlIcon: ImgAssetsConst.icMoney,
-                        ),
-                        _buttonMenu(
-                          paddingImage: EdgeInsets.all(13.h),
-                          name: 'Riwayat\nPembayaran',
-                          onTap: context.read<HomeCubit>().onTapHistoryPayment,
-                          urlIcon: ImgAssetsConst.icHistoryPayment,
-                        ),
-                        _buttonMenu(
-                          name: 'Logout',
-                          paddingImage: EdgeInsets.only(
-                            left: 13.w,
-                            right: 6.w,
-                            top: 3.h,
-                            bottom: 3.h,
-                          ),
-                          onTap: context.read<HomeCubit>().onTapLogout,
-                          urlIcon: ImgAssetsConst.icLogout,
-                        ),
-                      ],
+                    SizedBox(
+                      height: 20.h,
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: BlocBuilder<HomeCubit, HomeState>(
+                        builder: (context, state) {
+                          return StudentCard(
+                            nameStudent: (state.userData.name ?? '......')
+                                .extToTitleCase(),
+                            nisn: (state.userData.nisn ?? '.....').toString(),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(
+                        35.w,
+                        37.h,
+                        35.w,
+                        30.h,
+                      ),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(
+                            20.r,
+                          ),
+                        ),
+                      ),
+                      child: GridView.count(
+                        shrinkWrap: true,
+                        primary: false,
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 30.w,
+                        crossAxisSpacing: 30.h,
+                        childAspectRatio: 1,
+                        children: [
+                          _buttonMenu(
+                            name: 'Profile',
+                            onTap: context.read<HomeCubit>().onTapProfile,
+                            urlIcon: ImgAssetsConst.icProfile,
+                          ),
+                          _buttonMenu(
+                            name: 'Data Tagihan',
+                            paddingImage: EdgeInsets.all(13.h),
+                            onTap: context.read<HomeCubit>().onTapBill,
+                            urlIcon: ImgAssetsConst.icMoney,
+                          ),
+                          _buttonMenu(
+                            paddingImage: EdgeInsets.all(13.h),
+                            name: 'Riwayat\nPembayaran',
+                            onTap:
+                                context.read<HomeCubit>().onTapHistoryPayment,
+                            urlIcon: ImgAssetsConst.icHistoryPayment,
+                          ),
+                          _buttonMenu(
+                            name: 'Logout',
+                            paddingImage: EdgeInsets.only(
+                              left: 13.w,
+                              right: 6.w,
+                              top: 3.h,
+                              bottom: 3.h,
+                            ),
+                            onTap: context.read<HomeCubit>().onTapLogout,
+                            urlIcon: ImgAssetsConst.icLogout,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           )

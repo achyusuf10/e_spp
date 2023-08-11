@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:e_spp/app/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:e_spp/app/widgets/main_button.dart';
@@ -29,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    log(MediaQuery.of(context).viewInsets.bottom.toString());
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -41,170 +38,170 @@ class _LoginPageState extends State<LoginPage> {
             padding: EdgeInsets.symmetric(
               horizontal: 16.w,
             ),
-            child: SizedBox(
-              height: 1.sh + MediaQuery.of(context).viewInsets.bottom + 40.h,
-              child: Form(
-                key: context.read<LoginCubit>().formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    Row(
-                      children: [
-                        Image.asset(
-                          ImgAssetsConst.logoMI,
-                          height: 40.h,
-                          fit: BoxFit.fitHeight,
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        Text(
-                          'E-SPP',
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 28.sp,
-                            color: AppColors.greenSecondary,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 24.h,
-                    ),
-                    Center(
-                      child: Image.asset(
-                        ImgAssetsConst.illusPayment,
-                        height: 150.h,
+            child: Form(
+              key: context.read<LoginCubit>().formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 16.h,
+                  ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        ImgAssetsConst.logoMI,
+                        height: 40.h,
                         fit: BoxFit.fitHeight,
                       ),
-                    ),
-                    SizedBox(
-                      height: 24.h,
-                    ),
-                    Text(
-                      'Hello There!',
-                      style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 40.sp,
-                        color: AppColors.greenSecondary,
+                      SizedBox(
+                        width: 10.w,
                       ),
+                      Text(
+                        'E-SPP',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 28.sp,
+                          color: AppColors.greenSecondary,
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 24.h,
+                  ),
+                  Center(
+                    child: Image.asset(
+                      ImgAssetsConst.illusPayment,
+                      height: 150.h,
+                      fit: BoxFit.fitHeight,
                     ),
-                    SizedBox(
-                      height: 6.h,
+                  ),
+                  SizedBox(
+                    height: 24.h,
+                  ),
+                  Text(
+                    'Hello There!',
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 40.sp,
+                      color: AppColors.greenSecondary,
                     ),
-                    Text(
-                      'Masuk dengan akun kamu',
-                      style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18.sp,
-                        color: AppColors.blackPrimary,
-                      ),
+                  ),
+                  SizedBox(
+                    height: 6.h,
+                  ),
+                  Text(
+                    'Masuk dengan akun kamu',
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18.sp,
+                      color: AppColors.blackPrimary,
                     ),
-                    SizedBox(
-                      height: 38.h,
+                  ),
+                  SizedBox(
+                    height: 38.h,
+                  ),
+                  Text(
+                    'Username',
+                    style: TextStyle(
+                      fontSize: 14.sp,
                     ),
-                    Text(
-                      'Username',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                      ),
+                  ),
+                  MainTextFormField(
+                    controller: context.read<LoginCubit>().usernameC,
+                    hintText: 'Masukkan username anda',
+                    validation: [
+                      RegexRule.emptyValidationRule,
+                    ],
+                  ),
+                  SizedBox(
+                    height: 18.h,
+                  ),
+                  Text(
+                    'Password',
+                    style: TextStyle(
+                      fontSize: 14.sp,
                     ),
-                    MainTextFormField(
-                      controller: context.read<LoginCubit>().usernameC,
-                      hintText: 'Masukkan username anda',
-                      validation: [
-                        RegexRule.emptyValidationRule,
-                      ],
-                    ),
-                    SizedBox(
-                      height: 18.h,
-                    ),
-                    Text(
-                      'Password',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    Builder(
-                      builder: (context) {
-                        ValueNotifier<bool> isObsecureText =
-                            ValueNotifier<bool>(false);
-                        return ValueListenableBuilder(
-                          builder: (context, value, child) {
-                            return MainTextFormField(
-                              controller: context.read<LoginCubit>().passwordC,
-                              hintText: 'Masukkan password anda',
-                              obscureText: isObsecureText.value,
-                              validation: [
-                                RegexRule.emptyValidationRule,
-                              ],
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  isObsecureText.value = !isObsecureText.value;
-                                },
-                                child: Icon(
-                                  isObsecureText.value
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  size: 20.h,
-                                ),
+                  ),
+                  Builder(
+                    builder: (context) {
+                      ValueNotifier<bool> isObsecureText =
+                          ValueNotifier<bool>(true);
+                      return ValueListenableBuilder(
+                        builder: (context, value, child) {
+                          return MainTextFormField(
+                            controller: context.read<LoginCubit>().passwordC,
+                            hintText: 'Masukkan password anda',
+                            obscureText: isObsecureText.value,
+                            validation: [
+                              RegexRule.emptyValidationRule,
+                            ],
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                isObsecureText.value = !isObsecureText.value;
+                              },
+                              child: Icon(
+                                isObsecureText.value
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                size: 20.h,
                               ),
-                            );
-                          },
-                          valueListenable: isObsecureText,
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    // Row(
-                    //   children: [
-                    //     BlocBuilder<LoginCubit, LoginState>(
-                    //       builder: (context, state) {
-                    //         return Checkbox(
-                    //           value: state.isRememberMe,
-                    //           checkColor: Colors.white,
-                    //           activeColor: AppColors.greenSecondary,
-                    //           shape: const CircleBorder(),
-                    //           materialTapTargetSize:
-                    //               MaterialTapTargetSize.shrinkWrap,
-                    //           visualDensity: const VisualDensity(
-                    //             vertical: -4,
-                    //             horizontal: -4,
-                    //           ),
-                    //           onChanged: (bool? value) {
-                    //             context
-                    //                 .read<LoginCubit>()
-                    //                 .toogleRememberMe(value ?? false);
-                    //           },
-                    //         );
-                    //       },
-                    //     ),
-                    //     SizedBox(
-                    //       width: 12.h,
-                    //     ),
-                    //     Text(
-                    //       'Ingat Saya',
-                    //       style: TextStyle(
-                    //         fontSize: 14.sp,
-                    //       ),
-                    //     ),
-                    //     const Spacer(),
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: 24.h,
-                    // ),
-                    MainButton(
-                      text: 'Masuk',
-                      onTap: context.read<LoginCubit>().onTapSignIn,
-                    ),
-                  ],
-                ),
+                            ),
+                          );
+                        },
+                        valueListenable: isObsecureText,
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  // Row(
+                  //   children: [
+                  //     BlocBuilder<LoginCubit, LoginState>(
+                  //       builder: (context, state) {
+                  //         return Checkbox(
+                  //           value: state.isRememberMe,
+                  //           checkColor: Colors.white,
+                  //           activeColor: AppColors.greenSecondary,
+                  //           shape: const CircleBorder(),
+                  //           materialTapTargetSize:
+                  //               MaterialTapTargetSize.shrinkWrap,
+                  //           visualDensity: const VisualDensity(
+                  //             vertical: -4,
+                  //             horizontal: -4,
+                  //           ),
+                  //           onChanged: (bool? value) {
+                  //             context
+                  //                 .read<LoginCubit>()
+                  //                 .toogleRememberMe(value ?? false);
+                  //           },
+                  //         );
+                  //       },
+                  //     ),
+                  //     SizedBox(
+                  //       width: 12.h,
+                  //     ),
+                  //     Text(
+                  //       'Ingat Saya',
+                  //       style: TextStyle(
+                  //         fontSize: 14.sp,
+                  //       ),
+                  //     ),
+                  //     const Spacer(),
+                  //   ],
+                  // ),
+                  // SizedBox(
+                  //   height: 24.h,
+                  // ),
+                  MainButton(
+                    text: 'Masuk',
+                    onTap: context.read<LoginCubit>().onTapSignIn,
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                ],
               ),
             ),
           ),

@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:e_spp/app/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:e_spp/app/features/profile/presentation/widgets/photo_profile_widget.dart';
 import 'package:e_spp/app/features/profile/presentation/widgets/profile_form_field.dart';
 import 'package:e_spp/app/widgets/appbar_widget.dart';
+import 'package:e_spp/app/widgets/main_button.dart';
 import 'package:e_spp/config/themes/app_colors.dart';
 import 'package:e_spp/constant/core/img_assets_const.dart';
 import 'package:e_spp/constant/core/svg_assets_const.dart';
@@ -12,31 +15,46 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
     context.read<ProfileCubit>().onInit();
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var bottom = MediaQuery.of(context).viewInsets.bottom;
+    log(bottom.toString());
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
+      // extendBody: true,
       appBar: const AppBarWidget.white(
         title: 'Profile',
         elevation: 2,
       ),
-      // bottomSheet: BlocBuilder<ProfileCubit, ProfileState>(
-      //   builder: (context, state) {
-      //     return (state.selectedImageProfile != null || state.isFormEdited)
-      //         ? Padding(
-      //             padding: EdgeInsets.all(16.h),
-      //             child: MainButton(
-      //               text: 'Simpan',
-      //               onTap: context.read<ProfileCubit>().onTapSave,
-      //             ),
-      //           )
-      //         : const SizedBox();
-      //   },
-      // ),
+      bottomNavigationBar: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          log(state.isFormEdited.toString());
+          return (state.isFormEdited)
+              ? Padding(
+                  padding: EdgeInsets.all(16.h),
+                  child: MainButton(
+                    text: 'Simpan',
+                    onTap: context.read<ProfileCubit>().onTapSave,
+                  ),
+                )
+              : const SizedBox();
+        },
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -169,9 +187,32 @@ class ProfilePage extends StatelessWidget {
                 context.read<ProfileCubit>().onChangeFormField();
               },
             ),
-            SizedBox(
-              height: 100.h,
+            ProfileFormField(
+              controller: context.read<ProfileCubit>().passwordC,
+              urlIcon: '',
+              customIconWidget: Icon(
+                Icons.password,
+                color: Colors.teal,
+                size: 24.h,
+              ),
+              hintText: 'Masukkan Password yang Baru',
+              labelText: 'Password',
+              // readOnly: true,
+              // validation: [
+              //   RegexRule.emptyValidationRule,
+              // ],
+              onChange: (value) {
+                context.read<ProfileCubit>().onChangeFormField();
+              },
             ),
+            SizedBox(
+              height: MediaQuery.of(context).viewInsets.bottom + 50.h,
+            )
+            // KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
+            //   return SizedBox(
+            //     height: isKeyboardVisible ? 350.h : 100.h,
+            //   );
+            // }),
           ],
         ),
       ),

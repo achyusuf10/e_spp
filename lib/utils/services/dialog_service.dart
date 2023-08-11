@@ -34,7 +34,7 @@ class DialogService {
     }
   }
 
-  void mainPopUp({
+  Future<T?> mainPopUp<T>({
     /// Default True
     bool barrierDismissible = true,
     required String title,
@@ -44,8 +44,8 @@ class DialogService {
     String secondaryButtonText = '',
     Function()? mainButtonFunction,
     Function()? secondaryButtonFunction,
-  }) {
-    showDialog(
+  }) async {
+    return await showDialog<T>(
       barrierDismissible: barrierDismissible,
       context: (getContext.exec),
       builder: (BuildContext context) {

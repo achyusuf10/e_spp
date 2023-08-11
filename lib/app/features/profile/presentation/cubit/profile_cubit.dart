@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:e_spp/app/features/auth/domain/usecases/get_user_profile_usecase.dart';
+import 'package:e_spp/app/features/profile/domain/usecases/update_user_usecase.dart';
 import 'package:e_spp/utils/functions/get_context_func.dart';
 import 'package:e_spp/utils/services/dialog_service.dart';
 import 'package:e_spp/utils/services/modal_bottom_sheet_service.dart';
@@ -18,11 +20,13 @@ class ProfileCubit extends Cubit<ProfileState> {
   final DialogService _dialogService;
   final ModalBottomSheetService _bottomSheetService;
   final GetUserProfileUseCase _getUserProfileUseCase;
+  final UpdateUserUseCase _updateUserUseCase;
   ProfileCubit(
     this._getContext,
     this._dialogService,
     this._bottomSheetService,
     this._getUserProfileUseCase,
+    this._updateUserUseCase,
   ) : super(const ProfileState());
   TextEditingController nisnC = TextEditingController();
   TextEditingController namaC = TextEditingController();
@@ -31,6 +35,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   TextEditingController classC = TextEditingController();
   TextEditingController noHpC = TextEditingController();
   TextEditingController emailC = TextEditingController();
+  TextEditingController passwordC = TextEditingController();
   String stateUserData = '';
 
   void onInit() async {
@@ -42,6 +47,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     classC.clear();
     noHpC.clear();
     emailC.clear();
+    passwordC.clear();
     data.whenOrNull(
       success: (data) {
         nisnC.text = data.nisn.toString();
@@ -68,18 +74,25 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   void onChangeFormField() {
-    String tempData = nisnC.text +
-        namaC.text +
-        dateC.text +
-        classC.text +
-        noHpC.text +
-        emailC.text;
-
-    if (tempData == stateUserData) {
-      emit(state.copyWith(isFormEdited: false));
-    } else {
+    log('tess2');
+    if (passwordC.text.length > 7) {
       emit(state.copyWith(isFormEdited: true));
+    } else {
+      emit(state.copyWith(isFormEdited: false));
     }
+    // log(passwordC.text);
+    // String tempData = nisnC.text +
+    //     namaC.text +
+    //     dateC.text +
+    //     classC.text +
+    //     noHpC.text +
+    //     emailC.text;
+
+    // if (tempData == stateUserData) {
+    //   emit(state.copyWith(isFormEdited: false));
+    // } else {
+    //   emit(state.copyWith(isFormEdited: true));
+    // }
   }
 
   void onTapChangeImage() {
@@ -91,5 +104,37 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
-  void onTapSave() {}
+  void onTapSave() async {
+    var res = await _dialogService.mainPopUp<bool>(
+        title: 'Apakah kamu yakin?',
+        desc: 'Apakah Kamu Yakin Untuk Mengubah Password Kamu?',
+        mainButtonText: 'Ya',
+        mainButtonFunction: () {
+          Navigator.pop(_getContext.exec, true);
+        });
+    if (res != true) return;
+    _dialogService.loading();
+    var data = await _getUserProfileUseCase.call();
+    var resUpdate = await _updateUserUseCase.call(
+      UpdateUserParams(
+        name: data.data?.name ?? '',
+        email: data.data?.email ?? '',
+        roles: data.data?.roles ?? '',
+        username: data.data?.username ?? '',
+        password: passwordC.text,
+      ),
+    );
+    _dialogService.closeOverlay();
+
+    resUpdate.when(
+      success: (_) {
+        _dialogService.dialogSuccess(desc: 'Berhasil Mengganti Password');
+        emit(state.copyWith(isFormEdited: false));
+        passwordC.clear();
+      },
+      error: (_, __, ___, ____) {
+        _dialogService.dialogProblem(desc: _);
+      },
+    );
+  }
 }

@@ -26,9 +26,9 @@ class UserModel with _$UserModel {
     return UserModel(
       id: (json['id'] ?? json['user_id']) as int?,
       name: (json['name'] ?? json['user']['name']) as String?,
-      username: json['username'] as String?,
+      username: (json['username'] ?? json['user']['username']) as String?,
       email: (json['email'] ?? json['user']['email']) as String?,
-      roles: json['roles'] as String?,
+      roles: (json['roles'] ?? json['user']['roles']) as String?,
       nisn: json['nisn'] as int?,
       gender: json['jenis_kelamin'] as String?,
       alamat: json['alamat'] as String?,

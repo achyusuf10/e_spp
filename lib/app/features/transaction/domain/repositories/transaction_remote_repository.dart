@@ -31,6 +31,10 @@ class TransactionRemoteRepository {
             e.message ??
             "Terjadi kesalahan pada sistem.",
       );
+    } catch (err) {
+      return DataActivities.error(
+        message: err.toString(),
+      );
     }
   }
 }

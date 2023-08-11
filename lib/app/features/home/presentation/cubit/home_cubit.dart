@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bloc/bloc.dart';
 import 'package:e_spp/app/features/auth/domain/models/user_model.dart';
 import 'package:e_spp/app/features/auth/domain/usecases/get_user_profile_usecase.dart';
+import 'package:e_spp/app/features/auth/domain/usecases/update_user_profile_usecase.dart';
 import 'package:e_spp/app/features/home/domain/usecases/logout_usecase.dart';
 import 'package:e_spp/config/routes/app_router.dart';
 import 'package:e_spp/constant/core/img_assets_const.dart';
@@ -20,12 +21,14 @@ class HomeCubit extends Cubit<HomeState> {
   final DialogService _dialogService;
   final GetUserProfileUseCase _getProfileUC;
   final LogoutUseCase _logoutUseCase;
+  final UpdateUserProfileUseCase _updateUserProfileUseCase;
 
   HomeCubit(
     this._getContext,
     this._dialogService,
     this._getProfileUC,
     this._logoutUseCase,
+    this._updateUserProfileUseCase,
   ) : super(
           HomeState(
             userData: UserModel(),
@@ -33,7 +36,7 @@ class HomeCubit extends Cubit<HomeState> {
         );
 
   void onInit() async {
-    var res = await _getProfileUC.callLocal();
+    var res = await _getProfileUC.call();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String appVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
     res.whenOrNull(
@@ -42,6 +45,17 @@ class HomeCubit extends Cubit<HomeState> {
           userData: data,
           appVersion: appVersion,
         ));
+      },
+    );
+  }
+
+  void onRefresh() async {
+    var res = await _getProfileUC.call();
+
+    res.whenOrNull(
+      success: (data) {
+        _updateUserProfileUseCase.call(data);
+        emit(state.copyWith(userData: data));
       },
     );
   }

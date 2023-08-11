@@ -22,17 +22,19 @@ import '../../app/features/auth/domain/usecases/login_usecase.dart' as _i21;
 import '../../app/features/auth/domain/usecases/update_user_profile_usecase.dart'
     as _i13;
 import '../../app/features/auth/presentation/cubit/login_cubit.dart' as _i30;
-import '../../app/features/auth/presentation/cubit/splash_cubit.dart' as _i24;
+import '../../app/features/auth/presentation/cubit/splash_cubit.dart' as _i23;
 import '../../app/features/home/domain/usecases/logout_usecase.dart' as _i11;
 import '../../app/features/home/presentation/cubit/home_cubit.dart' as _i20;
 import '../../app/features/profile/domain/repositories/profile_remote_repository.dart'
-    as _i23;
-import '../../app/features/profile/presentation/cubit/profile_cubit.dart'
     as _i22;
+import '../../app/features/profile/domain/usecases/update_user_usecase.dart'
+    as _i25;
+import '../../app/features/profile/presentation/cubit/profile_cubit.dart'
+    as _i31;
 import '../../app/features/transaction/domain/repositories/bill_remote_repository.dart'
     as _i16;
 import '../../app/features/transaction/domain/repositories/transaction_remote_repository.dart'
-    as _i25;
+    as _i24;
 import '../../app/features/transaction/domain/usecases/get_bill_datas_usecase.dart'
     as _i17;
 import '../../app/features/transaction/domain/usecases/get_detail_bill_usecase.dart'
@@ -54,7 +56,7 @@ import '../../utils/services/hive_services.dart' as _i5;
 import '../../utils/services/image_picker_service.dart' as _i6;
 import '../../utils/services/modal_bottom_sheet_service.dart' as _i12;
 import '../../utils/services/snackbar_service.dart' as _i7;
-import 'di_module.dart' as _i31;
+import 'di_module.dart' as _i32;
 
 // ignore_for_file: unnecessary_lambdas
 // ignore_for_file: lines_longer_than_80_chars
@@ -117,27 +119,24 @@ Future<_i1.GetIt> $initGetIt(
         gh<_i10.DialogService>(),
         gh<_i19.GetUserProfileUseCase>(),
         gh<_i11.LogoutUseCase>(),
+        gh<_i13.UpdateUserProfileUseCase>(),
       ));
   gh.lazySingleton<_i21.LoginUseCase>(
       () => _i21.LoginUseCase(gh<_i15.AuthRemoteRepository>()));
-  gh.lazySingleton<_i22.ProfileCubit>(() => _i22.ProfileCubit(
-        gh<_i4.GetContextFunc>(),
-        gh<_i10.DialogService>(),
-        gh<_i12.ModalBottomSheetService>(),
-        gh<_i19.GetUserProfileUseCase>(),
-      ));
-  gh.lazySingleton<_i23.ProfileRemoteRepository>(
-      () => _i23.ProfileRemoteRepository(gh<_i14.ApiServices>()));
-  gh.lazySingleton<_i24.SplashCubit>(() => _i24.SplashCubit(
+  gh.lazySingleton<_i22.ProfileRemoteRepository>(
+      () => _i22.ProfileRemoteRepository(gh<_i14.ApiServices>()));
+  gh.lazySingleton<_i23.SplashCubit>(() => _i23.SplashCubit(
         gh<_i4.GetContextFunc>(),
         gh<_i19.GetUserProfileUseCase>(),
       ));
-  gh.lazySingleton<_i25.TransactionRemoteRepository>(
-      () => _i25.TransactionRemoteRepository(gh<_i14.ApiServices>()));
+  gh.lazySingleton<_i24.TransactionRemoteRepository>(
+      () => _i24.TransactionRemoteRepository(gh<_i14.ApiServices>()));
+  gh.lazySingleton<_i25.UpdateUserUseCase>(
+      () => _i25.UpdateUserUseCase(gh<_i22.ProfileRemoteRepository>()));
   gh.lazySingleton<_i26.GetDetailTransactionUseCase>(() =>
-      _i26.GetDetailTransactionUseCase(gh<_i25.TransactionRemoteRepository>()));
+      _i26.GetDetailTransactionUseCase(gh<_i24.TransactionRemoteRepository>()));
   gh.lazySingleton<_i27.GetTransactionDatasUseCase>(() =>
-      _i27.GetTransactionDatasUseCase(gh<_i25.TransactionRemoteRepository>()));
+      _i27.GetTransactionDatasUseCase(gh<_i24.TransactionRemoteRepository>()));
   gh.lazySingleton<_i28.HistoryBillCubit>(() => _i28.HistoryBillCubit(
         gh<_i4.GetContextFunc>(),
         gh<_i10.DialogService>(),
@@ -157,7 +156,14 @@ Future<_i1.GetIt> $initGetIt(
         gh<_i13.UpdateUserProfileUseCase>(),
         gh<_i19.GetUserProfileUseCase>(),
       ));
+  gh.lazySingleton<_i31.ProfileCubit>(() => _i31.ProfileCubit(
+        gh<_i4.GetContextFunc>(),
+        gh<_i10.DialogService>(),
+        gh<_i12.ModalBottomSheetService>(),
+        gh<_i19.GetUserProfileUseCase>(),
+        gh<_i25.UpdateUserUseCase>(),
+      ));
   return getIt;
 }
 
-class _$DIModules extends _i31.DIModules {}
+class _$DIModules extends _i32.DIModules {}

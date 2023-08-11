@@ -46,7 +46,8 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: AppConst.designSize,
       minTextAdapt: true,
-      splitScreenMode: true,
+      useInheritedMediaQuery: true,
+      splitScreenMode: false,
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
