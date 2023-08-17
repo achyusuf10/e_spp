@@ -1,12 +1,7 @@
 import 'dart:io';
 
 import 'package:e_spp/app/features/auth/domain/models/user_model.dart';
-import 'package:e_spp/app/features/auth/presentation/cubit/login_cubit.dart';
-import 'package:e_spp/app/features/auth/presentation/cubit/splash_cubit.dart';
 import 'package:e_spp/app/features/home/presentation/cubit/home_cubit.dart';
-import 'package:e_spp/app/features/profile/presentation/cubit/profile_cubit.dart';
-import 'package:e_spp/app/features/transaction/presentation/cubit/history_bill_cubit.dart';
-import 'package:e_spp/app/features/transaction/presentation/cubit/history_payment_cubit.dart';
 import 'package:e_spp/config/routes/app_router.dart';
 import 'package:e_spp/config/themes/app_themes.dart';
 import 'package:e_spp/constant/common/app_const.dart';
@@ -51,12 +46,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider<SplashCubit>(create: (context) => di.get()),
-            BlocProvider<LoginCubit>(create: (context) => di.get()),
             BlocProvider<HomeCubit>(create: (context) => di.get()),
-            BlocProvider<HistoryBillCubit>(create: (context) => di.get()),
-            BlocProvider<HistoryPaymentCubit>(create: (context) => di.get()),
-            BlocProvider<ProfileCubit>(create: (context) => di.get()),
           ],
           child: MaterialApp.router(
             routerConfig: di.get<AppRouter>().config(
